@@ -12,6 +12,7 @@ import Attendance from './Pages/Attendance';
 import Courses from './Pages/Courses';
 import Admin from './Pages/Users';
 import AdminDashboard from './Pages/AdminDashboard';
+import EnrollPage from './Pages/EnrollPage';
 
 export default function App(){
   return(
@@ -26,7 +27,10 @@ export default function App(){
       <Route path="/Admin" element={<Admin/>} />
       <Route path="/Attendance" element={<Attendance/>} />
       <Route path="/Courses" element={<Courses/>} />
-      <Route path="/AdminDashboard/*" element={<AdminDashboard/>} />v
+      <Route path="/AdminDashboard/*" element={<AdminDashboard/>} />
+      <Route path="/EnrollPage" element={<EnrollPage/>} />
+
+
     </Routes>
     <Footer/>
     </BrowserRouter>

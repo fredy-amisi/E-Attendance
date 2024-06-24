@@ -22,12 +22,7 @@ const Navbar = () => {
           <li><Link to="/About"><span>ABOUT</span></Link></li>
           <li><Link to="/courses"><span>COURSES</span></Link></li>
           <li><Link to="/Attendance"><span>ATTENDANCE</span></Link></li>
-          <li className="dropdown"><span>LOGIN</span>
-            <ul className="dropdown-content">
-              <li><Link to="/UserLogin">User</Link></li>
-              <li><Link to="/AdminDashboard">Admin</Link></li>
-            </ul>
-          </li>
+          <li><Link to="/Login"><span>LOGIN</span></Link></li>
           <li><Link to="/ussd-requests"><span>USSD REQUESTS</span></Link></li>
           <li><Link to="/notifications"><span>NOTIFICATIONS</span></Link></li>
           <li><Link to="/Contact"><span>CONTACT</span></Link></li>

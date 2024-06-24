@@ -1,14 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import '../Css/Uploadcourse.css';
 
 const UploadCourse = () => {
     const [courseData, setCourseData] = useState({
         course_name: '',
         course_code: '',
         description: '',
-        teacher_id: '', // Assuming the admin knows the teacher ID or it's selected from a list
+        teacher_id: '',
     });
     const [courseImage, setCourseImage] = useState(null);
+    const [courses, setCourses] = useState([]);
+
+    // Fetch courses on component mount
+    useEffect(() => {
+        fetchCourses();
+    }, []);
+
+    const fetchCourses = async () => {
+        try {
+            const response = await axios.get('http://localhost/bridge/getcourses.php');
+            setCourses(response.data);
+        } catch (error) {
+            console.error('Error fetching courses:', error);
+        }
+    };
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -25,11 +41,11 @@ const UploadCourse = () => {
         formData.append('course_name', courseData.course_name);
         formData.append('course_code', courseData.course_code);
         formData.append('description', courseData.description);
-        formData.append('teacher_id', courseData.teacher_id);
+        formData.append('teacher_id', courseData.teacher_id);       
         formData.append('course_image', courseImage);
 
         try {
-            const response = await axios.post('http://localhost/bridge/admin?action=upload_course', formData, {
+            const response = await axios.post('http://localhost/bridge/uploadcourse.php', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
@@ -38,14 +54,41 @@ const UploadCourse = () => {
             if (response.data.success) {
                 setCourseData({ course_name: '', course_code: '', description: '', teacher_id: '' });
                 setCourseImage(null);
+                fetchCourses(); // Fetch courses again to update the list
             }
         } catch (error) {
             alert('Error creating course: ' + error.message);
         }
     };
 
+    const handleEditCourse = async (courseId) => {
+        // Fetch the course details by courseId and populate the form for editing
+        const selectedCourse = courses.find(course => course.id === courseId);
+        if (selectedCourse) {
+            setCourseData({
+                course_name: selectedCourse.course_name,
+                course_code: selectedCourse.course_code,
+                description: selectedCourse.description,
+                teacher_id: selectedCourse.teacher_id,
+            });
+            // You might also want to set the course image, if needed
+        }
+    };
+
+    const handleDeleteCourse = async (courseId) => {
+        try {
+            const response = await axios.post('http://localhost/bridge/deletecourse.php', { id: courseId });
+            alert(response.data.message);
+            if (response.data.success) {
+                fetchCourses(); // Fetch courses again to update the list
+            }
+        } catch (error) {
+            alert('Error deleting course: ' + error.message);
+        }
+    };
+
     return (
-        <div>
+        <div className="submit-container">
             <h2>Upload New Course</h2>
             <form onSubmit={handleSubmit}>
                 <input
@@ -64,7 +107,8 @@ const UploadCourse = () => {
                     onChange={handleInputChange}
                     required
                 />
-                <textarea
+                <textarea 
+                    className="textarea"
                     name="description"
                     placeholder="Course Description"
                     value={courseData.description}
@@ -85,8 +129,24 @@ const UploadCourse = () => {
                     onChange={handleImageChange}
                     required
                 />
-                <button type="submit">Upload Course</button>
+                <button className="submit" type="submit">Upload Course</button>
             </form>
+
+            {/* Display courses for editing and deleting */}
+            <div className="course-list">
+                {courses.map((course) => (
+                    <div key={course.id} className="course-item">
+                        <div>
+                            <h3>{course.course_name}</h3>
+                            <p>{course.description}</p>
+                        </div>
+                        <div>
+                            <button className="edit-btn" onClick={() => handleEditCourse(course.id)}>Edit</button>
+                            <button className="delete-btn" onClick={() => handleDeleteCourse(course.id)}>Delete</button>
+                        </div>
+                    </div>
+                ))}
+            </div>
         </div>
     );
 };

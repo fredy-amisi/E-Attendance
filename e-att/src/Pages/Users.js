@@ -34,6 +34,7 @@ const Admin = () => {
                             <th className="th">Username</th>
                             <th className="th">ROLE</th>
                             <th className="th">Phone Number</th>
+                            <th className="th">Creatted At</th>
                             <th className="th">Actions</th>
                         </tr>
                     </thead>
@@ -46,6 +47,7 @@ const Admin = () => {
                                 <td>{user.username}</td>
                                 <td>{user.role}</td>
                                 <td>{user.phonenumber}</td>
+                                <td>{user.signin_date}</td>
                                 <td>
                                     <Link to={`user/${user.id}/edit`}>Edit</Link>
                                     <button>Delete</button>

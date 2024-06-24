@@ -31,15 +31,19 @@ const Login = () => {
         password,
       });
 
-      // After successful login
-if (response.data.success) {
-  // Redirect to dashboard with username
-  window.location.href = `/Dashboard?username=${username}`;
-  alert("You have successfully logged in.");
-}
-else {
+      if (response.data.success) {
+        // Check if the logged-in user is an admin
+        if (response.data.role === "admin") {
+          // Redirect to admin dashboard
+          window.location.href = "/AdminDashboard";
+        } else {
+          // Normal user login
+          alert("You have successfully logged in.");
+          window.location.href = "/Courses";
+        }
+      } else {
         // Login failed, display specific error message
-        alert(response.data.error);
+        alert(response.data.error); // Adjust according to your backend response structure
       }
     } catch (error) {
       console.error(error);
@@ -50,7 +54,7 @@ else {
   return (
     <div>
       <div className="login-section">
-        <h3>FASH TRANSPORT SERVICES</h3>
+        <h3>E-Attendance SERVICES</h3>
         <p>Sign in to your account</p>
         <form onSubmit={handleSubmit}>
           <label htmlFor="username">
@@ -82,7 +86,7 @@ else {
             </label>
             <p>Forgot Your Password?</p>
           </div>
-          <button className="login-button">
+          <button className="login-button" type="submit">
             <span>Login</span>
           </button>
           <p className="dont-p">
