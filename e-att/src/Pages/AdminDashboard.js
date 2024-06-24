@@ -3,8 +3,8 @@ import { NavLink, Routes, Route } from 'react-router-dom';
 import Users from '../Pages/Users';
 import Attendance from './Attendance';
 import UploadCourse from './UploadCourse';
-import Getenrollers from './Getenrollers';
 import Addteachers from './Addteachers'
+import Getenrollers from './Getenrollers'
 
 const AdminDashboard = () => {
     return (
